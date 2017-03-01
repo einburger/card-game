@@ -20,8 +20,8 @@ int main()
   srand( ( int ) time( nullptr ) );
 
   /*create the window*/
-  RenderWindow window( VideoMode( Simulation::WINDOW_WIDTH,
-                                  Simulation::WINDOW_HEIGHT ),
+  RenderWindow window( VideoMode( WINDOW_WIDTH,
+                                  WINDOW_HEIGHT ),
                        "Card Game" );
 
   Simulation sim( window );

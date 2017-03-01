@@ -4,13 +4,13 @@
 Player::Player() : has_won( false )
 {
   game_board.reset( new Board() );
-  card_place_holder.reserve( Simulation::NUMBER_IN_HAND );
-  for ( int i = 0; i < Simulation::NUMBER_IN_HAND; i++ )
+  card_place_holder.reserve( NUMBER_IN_HAND );
+  for ( int i = 0; i < NUMBER_IN_HAND; i++ )
     {
       card_place_holder.push_back( unique_card_ptr( new PlaceHolderCard() ) );
-      card_place_holder[ i ]->setLocation( ( i * Simulation::CARD_WIDTH ) +
-                                           Simulation::CARD_X_OFFSET,
-                                           Simulation::CARD_Y );
+      card_place_holder[ i ]->setLocation( ( i * CARD_WIDTH ) +
+                                           CARD_X_OFFSET,
+                                           CARD_Y );
     }
 }
 
@@ -58,7 +58,7 @@ void Player::dragCard( RenderWindow &window )
      collision zones the topmost cards in this intersection
      is selected, thus we iterate in reverse ( front to back )
      instead of forward ( back to front ) */
-  for ( int i = Simulation::NUMBER_IN_HAND - 1; i >= 0; i-- )
+  for ( int i = NUMBER_IN_HAND - 1; i >= 0; i-- )
     {
       if ( current_hand[ i ]->checkIfClicked( window ) )
         {
@@ -105,7 +105,7 @@ void Player::snapObjects( RenderWindow &window )
           current_hand.back()->setLocation( sprite_x, sprite_y );
         }
     }
-  for ( int i = 0; i < Simulation::NUMBER_IN_HAND; i++ )
+  for ( int i = 0; i < NUMBER_IN_HAND; i++ )
     {
       if ( card_place_holder[ i ]->checkIfClicked( window ) &&
            current_hand.back()->checkIfClicked( window ) )

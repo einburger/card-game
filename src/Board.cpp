@@ -4,16 +4,18 @@
 Board::Board()
 {
   Texture block;
-  if ( !block.loadFromFile( resourcePath() + "grid.jpg" ) )
-    {
-      // error
-    }
+  std::string image_name = "grid.jpg";
+  float xPos, yPos;
   for ( int i = 0; i < NUMBER_OF_BUTTONS; i++ )
     {
       button_ptr_vec col;
       for ( int j = 0; j < NUMBER_OF_BUTTONS; j++ )
         {
-          col.push_back( button_ptr( new button( i, j ) ) );
+          xPos = i * BUTTON_SPACING + BUTTON_X_OFFSET;
+          yPos = j * BUTTON_SPACING - BUTTON_Y_OFFSET;
+          col.push_back( button_ptr( new Button( xPos,
+                                                 yPos,
+                                                 image_name ) ) );
         }
       buttons.push_back( std::move( col ) );
     }

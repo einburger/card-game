@@ -25,22 +25,25 @@ typedef std::unique_ptr<Card>                  unique_card_ptr;
 typedef std::vector< std::unique_ptr<Card> >   unique_card_ptr_vector;
 typedef unsigned int uint;
 
+static const uint                              WINDOW_WIDTH = 800;
+static const uint                              WINDOW_HEIGHT = 600;
+static const uint                              NUMBER_IN_HAND = 5;
+static const uint                              NUMBER_OF_CARDS = 100;
+static const uint                              NUMBER_OF_PLAYERS = 3;
+static constexpr float                         CARD_WIDTH = 100;
+static constexpr float                         CARD_X_OFFSET = 150;
+static constexpr float                         CARD_Y = 500;
 
 class Card;
 class Board;
 
 class Simulation
 {
- public:
-  static const uint                            WINDOW_WIDTH = 800;
-  static const uint                            WINDOW_HEIGHT = 600;
-  static const uint                            NUMBER_IN_HAND = 5;
-  static const uint                            NUMBER_OF_CARDS = 100;
-  static const uint                            NUMBER_OF_PLAYERS = 3;
-  static constexpr float                       CARD_WIDTH = 100;
-  static constexpr float                       CARD_X_OFFSET = 150;
-  static constexpr float                       CARD_Y = 500;
+ private:
+  unique_card_ptr_vector         deck;
+  uint                           seed;
 
+ public:
   enum GameStates
   {
     MENU = 0,
@@ -51,11 +54,6 @@ class Simulation
   }                              game_state;
   unique_player_ptr_vector       players;
   uint                           current_player;
-
- private:
-  unique_card_ptr_vector         deck;
-
-  uint                           seed;
 
  private:
   void shuffleCards();

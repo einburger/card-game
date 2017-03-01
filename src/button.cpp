@@ -1,55 +1,48 @@
-#include "button.h"
+#include "Button.h"
 #include "ResourcePath.hpp"
 
-button::button( float x, float y )
+Button::Button( float xPos, float yPos, std::string file_path )
 {
-  if ( !texture.loadFromFile( resourcePath() + "grid.jpg" ) )
+  std::string image_path = resourcePath() + file_path;
+  if ( !texture.loadFromFile( image_path ) )
   {
     // error
   }
   sprite.setTexture( texture );
-  sprite.setColor( sf::Color( 100, 100, 100 ) );
-  sprite.setOrigin( sf::Vector2f( sprite.getTexture()->getSize().x * 0.5,
-                                sprite.getTexture()->getSize().y * 0.5 ) );
-  setLocation( x, y );
+  sprite.setColor( BUTTON_COLOR );
+
+  float x = sprite.getTexture()->getSize().x;
+  float y = sprite.getTexture()->getSize().y;
+  sprite.setOrigin( Vector2f( x/2, y/2 ) );
+
+  updateLocation( xPos, yPos );
 }
 
-button::button( std::string filename )
-{
-    if ( !texture.loadFromFile( resourcePath() + filename ) )
-    {
-      // error
-    }
-    sprite.setTexture( texture );
-    sprite.setColor( sf::Color( 100, 100, 100 ) );
-    sprite.setOrigin( sf::Vector2f( sprite.getTexture()->getSize().x * 0.5,
-      sprite.getTexture()->getSize().y * 0.5 ) );
-}
-
-button::~button()
+Button::~Button()
 {
 }
 
-void button::setLocation( float xIn, float yIn )
+void Button::setLocation( float xIn, float yIn )
 {
-  x = xIn * 100 + 50;
-  y = yIn * 100 - 500;
-  sprite.setPosition( x, y );
+  xPos = xIn * 100 + 50;
+  yPos = yIn * 100 - 500;
+  sprite.setPosition( xPos, yPos );
 }
 
-void button::updateLocation( float xIn, float yIn )
+void Button::updateLocation( float xIn, float yIn )
 {
-  x = xIn;
-  y = yIn;
-  sprite.setPosition( x, y );
+  xPos = xIn;
+  yPos = yIn;
+  sprite.setPosition( xPos, yPos );
 }
 
-void button::draw( sf::RenderWindow &window )
+void Button::draw( RenderWindow &window )
 {
   window.draw( sprite );
 }
 
-bool button::checkIfClicked( sf::RenderWindow &window )
+bool Button::checkIfClicked( RenderWindow &window )
 {
-  return sprite.getGlobalBounds().contains( sf::Vector2f( sf::Mouse::getPosition( window ) ) );
+  Vector2f mousePos = Vector2f( Mouse::getPosition( window ) );
+  return sprite.getGlobalBounds().contains( mousePos );
 }

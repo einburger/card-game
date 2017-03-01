@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "button.h"
+#include "Button.h"
 #include "Simulation.h"
 
 using sf::Color;
@@ -14,10 +14,10 @@ using sf::RectangleShape;
 using sf::RenderWindow;
 using sf::Vector2f;
 
-typedef std::unique_ptr<button> unique_ptr;
-typedef std::vector< std::unique_ptr<button> > unique_ptr_vector;
+class Button;
 
-class button;
+typedef std::unique_ptr<Button> unique_button_ptr;
+typedef std::vector<unique_button_ptr> unique_button_ptr_vector;
 
 class Menu
 {
@@ -39,7 +39,7 @@ class Menu
   const float QUIT_X               = 400;
   const float QUIT_Y               = 500;
 
-  unique_ptr_vector button_vector;
+  unique_button_ptr_vector button_vector;
 
   enum Choice
   {
@@ -50,6 +50,7 @@ class Menu
 
  private:
   float getButtonOffsetY();
+  void changeCursorColor( RenderWindow &window, Simulation &sim );
 
  public:
   Menu();

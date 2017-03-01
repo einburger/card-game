@@ -2,19 +2,21 @@
 
 Menu::Menu()
 {
+  cursor.setPosition( Vector2f( 0, START_Y - Y_OFFSET ) );
   cursor.setSize( Vector2f( CURSOR_SIZE_X, CURSOR_SIZE_Y ) );
   cursor.setFillColor( CURSOR_COLOR );
 
-  button_vector.push_back( unique_ptr( new button( "start_button.jpg" ) ) );
-  button_vector[ START ]->updateLocation( START_X, START_Y );
+  button_vector.push_back( unique_button_ptr(new Button( START_X,
+                                                         START_Y,
+                                                         "start_button.jpg" ) ) );
 
-  button_vector.push_back( unique_ptr(new button( "options_button.jpg" ) ) );
-  button_vector[ OPTIONS ]->updateLocation( OPTIONS_X, OPTIONS_Y );
+  button_vector.push_back( unique_button_ptr(new Button( OPTIONS_X,
+                                                         OPTIONS_Y,
+                                                         "options_button.jpg" ) ) );
 
-  button_vector.push_back( unique_ptr(new button( "quit_button.jpg" ) ) );
-  button_vector[ QUIT ]->updateLocation( QUIT_X, QUIT_Y );
-
-  cursor.setPosition( Vector2f( 0, START_Y - Y_OFFSET ) );
+  button_vector.push_back( unique_button_ptr(new Button( QUIT_X,
+                                                         QUIT_Y,
+                                                         "quit_button.jpg" ) ) );
 }
 
 Menu::~Menu()
@@ -23,16 +25,7 @@ Menu::~Menu()
 
 void Menu::click( RenderWindow &window, Simulation &sim )
 {
-  while ( Keyboard::isKeyPressed( Keyboard::Return ) )
-  {
-    cursor.setFillColor( CLICKED_COLOR );
-    window.draw( cursor );
-    window.display();
-  }
-  cursor.setFillColor( CURSOR_COLOR );
-
-  window.draw( cursor );
-  window.display();
+  changeCursorColor( window, sim );
   switch ( current_button )
     {
     case START:
@@ -54,7 +47,23 @@ void Menu::click( RenderWindow &window, Simulation &sim )
 
 float Menu::getButtonOffsetY()
 {
-  return button_vector[ current_button ]->y - Y_OFFSET;
+  return button_vector[ current_button ]->yPos - Y_OFFSET;
+}
+
+void Menu::changeCursorColor( RenderWindow &window, Simulation &sim )
+{
+  if ( Keyboard::isKeyPressed( Keyboard::Return ) )
+    {
+      cursor.setFillColor( CLICKED_COLOR );
+      window.draw( cursor );
+      window.display();
+      while ( Keyboard::isKeyPressed( Keyboard::Return) )
+        {
+        }
+    }
+  cursor.setFillColor( CURSOR_COLOR );
+  window.draw( cursor );
+  window.display();
 }
 
 void Menu::moveCursorDown()

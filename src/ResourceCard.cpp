@@ -3,55 +3,43 @@
 
 ResourceCard::ResourceCard()
 {
-  if ( !card_appearance.loadFromFile( resourcePath() + "ResourceCard.jpg" ) )
+  std::string image_path = resourcePath() + "ResourceCard.jpg";
+  if ( !card_appearance.loadFromFile( image_path ) )
   {
     // error
   }
   card_sprite.setTexture( card_appearance );
-  card_sprite.setOrigin( sf::Vector2f( card_sprite.getTexture()->getSize().x * 0.5, card_sprite.getTexture()->getSize().y * 0.5 ) );
+  float x = card_sprite.getTexture()->getSize().x;
+  float y = card_sprite.getTexture()->getSize().y;
+  card_sprite.setOrigin( Vector2f( x/2, y/2 ) );
 }
 
 ResourceCard::~ResourceCard()
 {
 }
 
-void ResourceCard::playCard( Player *player, std::vector< std::unique_ptr<Room> > &board )
-{
-}
-
-sf::Texture ResourceCard::getAppearance()
+Texture ResourceCard::getAppearance()
 {
   return card_appearance;
 }
 
 void ResourceCard::setLocation( float x, float y )
 {
-  card_x = x;
-  card_y = y;
-  card_sprite.setPosition( sf::Vector2f( card_x, card_y ) );
+  card_sprite.setPosition( Vector2f( x, y ) );
 }
 
-sf::Sprite ResourceCard::getSprite()
+Sprite ResourceCard::getSprite()
 {
   return card_sprite;
 }
 
-float ResourceCard::getPositionX()
+bool ResourceCard::checkIfClicked( RenderWindow &window )
 {
-  return card_x;
+  Vector2f mousePos = Vector2f( Mouse::getPosition( window ) );
+  return card_sprite.getGlobalBounds().contains( mousePos );
 }
 
-float ResourceCard::getPositionY()
-{
-  return card_y;
-}
-
-bool ResourceCard::checkIfClicked( sf::RenderWindow &window )
-{
-  return ( card_sprite.getGlobalBounds().contains( sf::Vector2f( sf::Mouse::getPosition( window ) ) ) );
-}
-
-void ResourceCard::draw( sf::RenderWindow &window )
+void ResourceCard::draw( RenderWindow &window )
 {
   window.draw( card_sprite );
 }
