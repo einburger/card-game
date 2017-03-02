@@ -87,7 +87,7 @@ void Player::dragCard( RenderWindow &window )
 void Player::dragCardStack( RenderWindow &window )
 {
   float xPos, yPos;
-  for ( int i = NUMBER_IN_HAND - 1; i > 0; --i )
+  for ( int i = NUMBER_IN_HAND - 1; i >= 0; --i )
     {
       if (current_hand[ i ]->checkIfClicked( window )
           && Mouse::isButtonPressed( Mouse::Right ) )
@@ -180,10 +180,14 @@ void Player::highlightCard( RenderWindow &window )
 {
   for ( int i = NUMBER_IN_HAND - 1; i >= 0; --i )
     {
-      current_hand[ i ]->changeColor(Color(0, 0, 0));
+      current_hand[ i ]->changeColor( Color( 255, 255, 255 ) );
       if ( current_hand[ i ]->checkIfClicked( window ) )
         {
-          current_hand[ i ]->changeColor(Color(0,255,255));
+          current_hand[ i ]->changeColor( Color( 255, 0, 255 ) );
+          for ( int j = 0; j < i; ++j )
+            {
+              current_hand[ j ]->changeColor(Color( 255, 255, 255 ) );
+            }
           return;
         }
     }
