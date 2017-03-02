@@ -9,12 +9,16 @@
 #include "PlaceHolderCard.h"
 
 using sf::RenderWindow;
+using sf::Rect;
 using sf::RectangleShape;
 using sf::Mouse;
 using sf::Vector2f;
 using sf::Color;
 using sf::Text;
 using sf::Font;
+using sf::Keyboard;
+using sf::Texture;
+using sf::Sprite;
 
 class Board;
 
@@ -28,22 +32,26 @@ class Player : public GameObject
   bool has_won;
 
  public:
-  unique_board_ptr       game_board;
-  unique_card_ptr_vector current_hand;
-  unique_card_ptr_vector card_place_holder;
-  int                    player_id;
+  const float                                SNAP_OFFSET = 8;
+  unique_board_ptr                           game_board;
+  unique_card_ptr_vector                     current_hand;
+  unique_card_ptr_vector                     card_place_holder;
+  int                                        player_id;
 
  private:
   void setCardAtBack( int card_index );
+  void highlightCard( RenderWindow &window );
 
  public:
   Player();
   ~Player();
   float getMouseX( RenderWindow &window );
   float getMouseY( RenderWindow &window );
+  Vector2f getMouseXandY( RenderWindow &window );
   bool isWinner();
   void drawCard( unique_card_ptr &card );
   void dragCard( RenderWindow &window );
+  void dragCardStack( RenderWindow &window );
   void dragSnapBlock( RenderWindow &window );
   void snapObjects( RenderWindow &window );
   void draw( RenderWindow &window );

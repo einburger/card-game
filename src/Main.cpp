@@ -7,7 +7,7 @@ using sf::Event;
 using sf::Keyboard;
 using sf::Mouse;
 
-void updateWindow(RenderWindow &window, Menu &menu )
+void updateWindow( RenderWindow &window, Menu &menu )
 {
   window.clear( Color::Red );
   menu.draw( window );
@@ -23,7 +23,8 @@ int main()
   RenderWindow window( VideoMode( WINDOW_WIDTH,
                                   WINDOW_HEIGHT ),
                        "Card Game" );
-
+  window.setFramerateLimit( 60 );
+  window.setMouseCursorVisible( false );
   Simulation sim( window );
   Menu menu;
 
@@ -91,13 +92,9 @@ int main()
                     {
                       sim.dragObject( window );
                     }
-
                   case Event::MouseButtonReleased:
                     {
-                      if ( event.key.code == Mouse::Left )
-                        {
-                          sim.snapToContainer( window );
-                        }
+                      sim.snapToContainer( window );
                       break;
                     }
 

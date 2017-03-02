@@ -33,6 +33,11 @@ Sprite ResourceCard::getSprite()
   return card_sprite;
 }
 
+void ResourceCard::changeColor( Color color )
+{
+  card_sprite.setColor( color );
+}
+
 bool ResourceCard::checkIfClicked( RenderWindow &window )
 {
   Vector2f mousePos = Vector2f( Mouse::getPosition( window ) );
@@ -41,5 +46,9 @@ bool ResourceCard::checkIfClicked( RenderWindow &window )
 
 void ResourceCard::draw( RenderWindow &window )
 {
+  if (!checkIfClicked( window ))
+    {
+      card_sprite.setColor(sf::Color(255, 255, 255));
+    }
   window.draw( card_sprite );
 }

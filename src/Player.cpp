@@ -28,6 +28,11 @@ float Player::getMouseY( RenderWindow &window )
   return Mouse::getPosition( window ).y;
 }
 
+Vector2f Player::getMouseXandY( RenderWindow &window )
+{
+  return Vector2f( getMouseX( window ), getMouseY( window ) );
+}
+
 bool Player::isWinner()
 {
   return has_won;
@@ -35,13 +40,14 @@ bool Player::isWinner()
 
 void Player::setCardAtBack( int card_index )
 {
-  int i = card_index + 1;
-  if ( i <= current_hand.size() - 1 )
+  if ( card_index + 1 > current_hand.size() - 1 )
     {
-      for ( ; i < current_hand.size(); i++ )
-        {
-          std::swap( current_hand[ i - 1 ], current_hand[ i ] );
-        }
+      return;
+    }
+  int i = card_index + 1;
+  for ( ; i < current_hand.size(); ++i )
+    {
+      std::swap( current_hand[ i - 1 ], current_hand[ i ] );
     }
 }
 
@@ -58,9 +64,10 @@ void Player::dragCard( RenderWindow &window )
      collision zones the topmost cards in this intersection
      is selected, thus we iterate in reverse ( front to back )
      instead of forward ( back to front ) */
-  for ( int i = NUMBER_IN_HAND - 1; i >= 0; i-- )
+  for ( int i = NUMBER_IN_HAND - 1; i >= 0; --i )
     {
-      if ( current_hand[ i ]->checkIfClicked( window ) )
+      if ( current_hand[ i ]->checkIfClicked( window ) &&
+           Mouse::isButtonPressed( Mouse::Left ) )
         {
           setCardAtBack( i );
           while ( Mouse::isButtonPressed( Mouse::Left ) )
@@ -68,6 +75,41 @@ void Player::dragCard( RenderWindow &window )
               // set card to follow mouse if mouse is down
               current_hand.back()->setLocation( getMouseX( window ),
                                                 getMouseY( window ) );
+              draw( window );
+              window.display();
+            }
+          return;
+        }
+    }
+}
+
+/* need better method */
+void Player::dragCardStack( RenderWindow &window )
+{
+  float xPos, yPos;
+  for ( int i = NUMBER_IN_HAND - 1; i > 0; --i )
+    {
+      if (current_hand[ i ]->checkIfClicked( window )
+          && Mouse::isButtonPressed( Mouse::Right ) )
+        {
+          while ( Mouse::isButtonPressed ( Mouse::Right ) )
+            {
+              current_hand[ i ]->setLocation( Mouse::getPosition( window ).x,
+                                              Mouse::getPosition( window ).y );
+              for ( int j = i + 1; j < NUMBER_IN_HAND; ++j )
+                {
+
+                  if ( current_hand[ i ]->getSprite()
+                       .getGlobalBounds().intersects( current_hand[ j ]->getSprite()
+                                                      .getGlobalBounds() ) )
+                    {
+                      xPos = current_hand[ i ]->getSprite().getPosition().x;
+                      yPos = current_hand[ j - 1 ]->getSprite().getPosition().y;
+                      current_hand[ j ]->setLocation ( xPos,
+                                                       yPos + SNAP_OFFSET );
+
+                    }
+                }
               draw( window );
               window.display();
             }
@@ -96,6 +138,7 @@ void Player::dragSnapBlock( RenderWindow &window )
 void Player::snapObjects( RenderWindow &window )
 {
   float sprite_x, sprite_y;
+  /* Cards snap to "buttons " */
   if ( current_hand.back()->checkIfClicked( window ) )
     {
       if ( game_board->checkIfClicked( window ) )
@@ -105,6 +148,7 @@ void Player::snapObjects( RenderWindow &window )
           current_hand.back()->setLocation( sprite_x, sprite_y );
         }
     }
+  /* Cards snap to place holders */
   for ( int i = 0; i < NUMBER_IN_HAND; i++ )
     {
       if ( card_place_holder[ i ]->checkIfClicked( window ) &&
@@ -116,12 +160,39 @@ void Player::snapObjects( RenderWindow &window )
           return;
         }
     }
+  /* Let player stack cards on top of each other but keep
+   * unique Y positions */
+  for ( int i = NUMBER_IN_HAND - 2; i >= 0; --i )
+    {
+      if ( current_hand[ i ]->checkIfClicked( window ) &&
+           current_hand.back()->checkIfClicked( window ) )
+        {
+          sprite_x = current_hand[ i ]->getSprite().getPosition().x;
+          sprite_y = current_hand[ i ]->getSprite().getPosition().y;
+          current_hand.back()->setLocation( sprite_x,
+                                            sprite_y + SNAP_OFFSET );
+          return;
+        }
+    }
+}
+
+void Player::highlightCard( RenderWindow &window )
+{
+  for ( int i = NUMBER_IN_HAND - 1; i >= 0; --i )
+    {
+      current_hand[ i ]->changeColor(Color(0, 0, 0));
+      if ( current_hand[ i ]->checkIfClicked( window ) )
+        {
+          current_hand[ i ]->changeColor(Color(0,255,255));
+          return;
+        }
+    }
 }
 
 void Player::draw( RenderWindow &window )
 {
   // rectangle drawing function?
-  RectangleShape bottom_border, top_border;
+  RectangleShape bottom_border, top_border, mouse_x, mouse_y;
   bottom_border.setPosition( Vector2f( 0, 400 ) );
   bottom_border.setSize( Vector2f( 800, 400 ) );
   bottom_border.setFillColor( Color::Magenta );
@@ -129,6 +200,17 @@ void Player::draw( RenderWindow &window )
   top_border.setPosition( Vector2f( 0, 0 ) );
   top_border.setSize( Vector2f( 800, 400 ) );
   top_border.setFillColor( Color::Green );
+
+  mouse_y.setPosition( Vector2f( Mouse::getPosition( window ).x,
+                                 0 ) );
+
+  mouse_x.setPosition( Vector2f( 0,
+                                 Mouse::getPosition( window ). y ) );
+
+  mouse_x.setSize( Vector2f( 9000, 1 ) );
+  mouse_y.setSize( Vector2f( 1, 9000 ) );
+  mouse_x.setFillColor( Color::Red );
+  mouse_y.setFillColor( Color::Red );
 
   std::string player_id_string = "Player " + std::to_string( player_id );
   Text text;
@@ -160,8 +242,11 @@ void Player::draw( RenderWindow &window )
       i->draw( window );
     }
 
+  highlightCard( window );
   for ( const auto &i : current_hand )
     {
       i->draw( window );
     }
+  window.draw( mouse_x );
+  window.draw( mouse_y );
 }

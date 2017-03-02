@@ -40,6 +40,11 @@ bool PlaceHolderCard::checkIfClicked( RenderWindow& window )
   return card_sprite.getGlobalBounds().contains( mousePos );
 }
 
+void PlaceHolderCard::changeColor( Color color )
+{
+  card_sprite.setColor( color );
+}
+
 void PlaceHolderCard::draw( RenderWindow& window )
 {
   window.draw( card_sprite );

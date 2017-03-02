@@ -75,6 +75,7 @@ void Simulation::run( RenderWindow &window )
 void Simulation::dragObject( RenderWindow &window )
 {
   players[ current_player ]->dragCard( window );
+  players[ current_player ]->dragCardStack( window );
   players[ current_player ]->dragSnapBlock( window );
   players[ current_player ]->draw( window );
   window.display();

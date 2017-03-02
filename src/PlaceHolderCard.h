@@ -9,6 +9,7 @@ using sf::Sprite;
 using sf::RenderWindow;
 using sf::Mouse;
 using sf::Vector2f;
+using sf::Color;
 
 class PlaceHolderCard :
   public Card
@@ -24,4 +25,5 @@ public:
   Sprite getSprite();
   bool checkIfClicked( RenderWindow &window );
   void draw( RenderWindow &window );
+  void changeColor( Color color );
 };
