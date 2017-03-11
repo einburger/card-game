@@ -47,7 +47,6 @@ class Player : public GameObject
     ~Player();
     float getMouseX( RenderWindow &window );
     float getMouseY( RenderWindow &window );
-    Vector2f getMouseXandY( RenderWindow &window );
     bool isWinner();
     void drawCard( unique_card_ptr &card );
     void dragCard( RenderWindow &window );
