@@ -40,31 +40,31 @@ class Board;
 class Simulation
 {
  private:
-  unique_card_ptr_vector         deck;
-  uint                           seed;
+    unique_card_ptr_vector         deck;
+    uint                           seed;
 
  public:
-  enum GameStates
-  {
-    MENU = 0,
-    GAME = 1,
-    OPTIONS = 2,
-    PAUSE = 3,
-    QUIT = 4
-  }                              game_state;
-  unique_player_ptr_vector       players;
-  uint                           current_player;
+    enum GameStates
+    {
+        MENU = 0,
+        GAME = 1,
+        OPTIONS = 2,
+        PAUSE = 3,
+        QUIT = 4
+    }                              game_state;
+    unique_player_ptr_vector       players;
+    uint                           current_player;
 
  private:
-  void shuffleCards();
-  void playRound( RenderWindow &window );
-  bool nextTurn();
+    void shuffleCards();
+    void playRound( RenderWindow &window );
+    bool nextTurn();
 
  public:
-  Simulation( RenderWindow &window );
-  ~Simulation();
-  void run( RenderWindow &window );
-  void dragObject( RenderWindow &window );
-  void snapToContainer( RenderWindow &window );
-  void nextPlayer();
+    Simulation( RenderWindow &window );
+    ~Simulation();
+    void run( RenderWindow &window );
+    void dragObject( RenderWindow &window );
+    void snapToContainer( RenderWindow &window );
+    void nextPlayer();
 };
