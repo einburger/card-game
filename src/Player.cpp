@@ -28,11 +28,6 @@ float Player::getMouseY( RenderWindow &window )
     return Mouse::getPosition( window ).y;
 }
 
-Vector2f Player::getMouseXandY( RenderWindow &window )
-{
-    return Vector2f( getMouseX( window ), getMouseY( window ) );
-}
-
 bool Player::isWinner()
 {
     return has_won;
