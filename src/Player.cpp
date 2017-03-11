@@ -1,5 +1,7 @@
 #include "Player.h"
+#ifdef __APPLE__
 #include "resourcePath.hpp"
+#endif
 
 Player::Player() : has_won( false )
 {
