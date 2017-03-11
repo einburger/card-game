@@ -15,7 +15,7 @@ class Card : public GameObject
 {
  public:
   Card();
-  ~Card();
+  virtual ~Card();
   virtual void setLocation( float x, float y ) = 0;
   virtual Texture getAppearance() = 0;
   virtual Sprite getSprite() = 0;
