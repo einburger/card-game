@@ -95,7 +95,7 @@ void Player::dragCardStack( RenderWindow &window )
                                 {
                                     if ( current_hand[ j - 1 ]->getSprite()
                                         .getGlobalBounds()
-									   	.intersects( current_hand[ j ]->getSprite().getGlobalBounds() ) )
+					.intersects( current_hand[ j ]->getSprite().getGlobalBounds() ) )
                                         {
                                             xPos = current_hand[ j - 1 ]->getSprite().getPosition().x;
                                             yPos = current_hand[ j - 1 ]->getSprite().getPosition().y;
