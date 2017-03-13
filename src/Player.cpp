@@ -1,13 +1,11 @@
 #include "Player.h"
-#ifdef __APPLE__
 #include "resourcePath.hpp"
-#endif
 
 Player::Player() : has_won( false )
 {
     game_board.reset( new Board() );
     card_place_holder.reserve( NUMBER_IN_HAND );
-    for ( int i = 0; i < NUMBER_IN_HAND; i++ )
+    for ( int i = 0; i < NUMBER_IN_HAND; ++i )
         {
             card_place_holder.push_back( unique_card_ptr( new PlaceHolderCard() ) );
             card_place_holder[ i ]->setLocation( ( i * CARD_WIDTH ) +
@@ -95,16 +93,14 @@ void Player::dragCardStack( RenderWindow &window )
                                                             Mouse::getPosition( window ).y );
                             for ( int j = i + 1; j < NUMBER_IN_HAND; ++j )
                                 {
-
-                                    if ( current_hand[ i ]->getSprite()
-                                         .getGlobalBounds().intersects( current_hand[ j ]->getSprite()
-                                                                        .getGlobalBounds() ) )
+                                    if ( current_hand[ j - 1 ]->getSprite()
+                                        .getGlobalBounds()
+									   	.intersects( current_hand[ j ]->getSprite().getGlobalBounds() ) )
                                         {
-                                            xPos = current_hand[ i ]->getSprite().getPosition().x;
+                                            xPos = current_hand[ j - 1 ]->getSprite().getPosition().x;
                                             yPos = current_hand[ j - 1 ]->getSprite().getPosition().y;
                                             current_hand[ j ]->setLocation ( xPos,
                                                                              yPos + SNAP_OFFSET );
-
                                         }
                                 }
                             draw( window );
@@ -146,7 +142,7 @@ void Player::snapObjects( RenderWindow &window )
                 }
         }
     /* Cards snap to place holders */
-    for ( int i = 0; i < NUMBER_IN_HAND; i++ )
+    for ( int i = 0; i < NUMBER_IN_HAND; ++i )
         {
             if ( card_place_holder[ i ]->checkIfClicked( window ) &&
                  current_hand.back()->checkIfClicked( window ) )
@@ -202,12 +198,8 @@ void Player::draw( RenderWindow &window )
     top_border.setSize( Vector2f( 800, 400 ) );
     top_border.setFillColor( Color::Green );
 
-    mouse_y.setPosition( Vector2f( Mouse::getPosition( window ).x,
-                                   0 ) );
-
-    mouse_x.setPosition( Vector2f( 0,
-                                   Mouse::getPosition( window ). y ) );
-
+    mouse_y.setPosition( Vector2f( Mouse::getPosition( window ).x, 0 ) );
+    mouse_x.setPosition( Vector2f( 0, Mouse::getPosition( window ). y ) );
     mouse_x.setSize( Vector2f( 9000, 1 ) );
     mouse_y.setSize( Vector2f( 1, 9000 ) );
     mouse_x.setFillColor( Color::Red );
